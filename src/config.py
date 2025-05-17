@@ -1,4 +1,3 @@
-# config.py
 #  Copyright (c) 2025 AshokShau
 #  Licensed under the GNU AGPL v3.0: https://www.gnu.org/licenses/agpl-3.0.html
 #  Part of the TgMusicBot project. All rights reserved where applicable.
@@ -46,7 +45,7 @@ SESSION_STRINGS: list[str] = [getenv(f"STRING{i}", None) for i in range(1, 11)]
 SESSION_STRINGS = [s for s in SESSION_STRINGS if s]
 
 OWNER_ID: int = get_env_int("OWNER_ID", 7994776745)
-LOGGER_ID: int = get_env_int("LOGGER_ID", -1002503564743)
+LOGGER_ID: int = get_env_int("LOGGER_ID", 0)
 MONGO_URI: Optional[str] = getenv("MONGO_URI")
 API_URL: Optional[str] = getenv("API_URL")
 API_KEY: Optional[str] = getenv("API_KEY")
@@ -78,7 +77,3 @@ devs_env: Optional[str] = getenv("DEVS")
 DEVS: list[int] = list(map(int, devs_env.split())) if devs_env else []
 if OWNER_ID and OWNER_ID not in DEVS:
     DEVS.append(OWNER_ID)
-
-# Image URLs for start and ping commands
-PING_IMG_URL: Optional[str] = getenv("PING_IMG_URL", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGmPPApFlQX919wPp0scooGKuQFm_tHcBMdp8GGaSX2Oihr5L9&s")
-START_IMG_URL: Optional[str] = getenv("START_IMG_URL", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHIukuaQi3bjuc4GjT5wfDpcKc00EFW8rPdyXlWbjvrdDb3bvW&s")
