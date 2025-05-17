@@ -1,4 +1,4 @@
-#  Copyright (c) 2025 AshokShau
+#  Copyright (c) 2025 AshokShau3
 #  Licensed under the GNU AGPL v3.0: https://www.gnu.org/licenses/agpl-3.0.html
 #  Part of the TgMusicBot project. All rights reserved where applicable.
 
@@ -55,19 +55,19 @@ BACK_BTN = types.InlineKeyboardButton(
 )
 
 USER_BTN = types.InlineKeyboardButton(
-    text="👤 User Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_user")
+    text="User Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_user")
 )
 
 ADMIN_BTN = types.InlineKeyboardButton(
-    text="🔰 Admin Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_admin")
+    text="Admin Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_admin")
 )
 
 OWNER_BTN = types.InlineKeyboardButton(
-    text="🗿 Owner Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_owner")
+    text="Owner Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_owner")
 )
 
 DEVS_BTN = types.InlineKeyboardButton(
-    text="👑 Devs Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_devs")
+    text="Devs Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_devs")
 )
 
 # ─────────────────────
@@ -84,6 +84,10 @@ PauseButton = types.ReplyMarkupInlineKeyboard(
 
 ResumeButton = types.ReplyMarkupInlineKeyboard(
     [[SKIP_BTN, STOP_BTN, PAUSE_BTN], [CLOSE_BTN]]
+)
+
+SupportButton = types.ReplyMarkupInlineKeyboard(
+    [[CHANNEL_BTN], [GROUP_BTN]]
 )
 
 StartMenu = types.ReplyMarkupInlineKeyboard(
