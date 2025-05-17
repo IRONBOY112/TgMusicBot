@@ -1,3 +1,4 @@
+# start.py
 #  Copyright (c) 2025 AshokShau
 #  Licensed under the GNU AGPL v3.0: https://www.gnu.org/licenses/agpl-3.0.html
 #  Part of the TgMusicBot project. All rights reserved where applicable.
@@ -9,7 +10,7 @@ from cachetools import TTLCache
 from pytdbot import Client, types
 
 from src import __version__, StartTime
-from src.config import SUPPORT_GROUP
+from src.config import SUPPORT_GROUP, SUPPORT_CHANNEL, PING_IMG_URL, START_IMG_URL
 from src.helpers import call
 from src.helpers import chat_cache
 from src.modules.utils import Filter, sec_to_min, SupportButton, user_status_cache, check_user_status, chat_invite_cache
@@ -31,26 +32,100 @@ from src.modules.utils.strings import (
 @Client.on_message(filters=Filter.command(["start", "help"]))
 async def start_cmd(c: Client, message: types.Message):
     """
-    Handle the /start and /help command to welcome users.
+    Handle the /start and /help command to welcome users with an image.
     """
     chat_id = message.chat_id
     bot_name = c.me.first_name
+    bot_username = c.me.usernames.editable_username
+    user_firstname = message.sender.first_name  # Fetch user's first name
+
+    # Create inline keyboard buttons similar to IRO MUSIC bot
+    keyboard = types.ReplyInlineMarkup(
+        rows=[
+            [types.InlineKeyboardButton(text="ADD ME TO YOUR GROUP", url=f"https://t.me/{bot_username}?startgroup=true")],
+            [
+                types.InlineKeyboardButton(text="HELP & COMMANDS", callback_data="help_all"),
+                types.InlineKeyboardButton(text="CHANNEL", url=SUPPORT_CHANNEL),
+            ],
+            [
+                types.InlineKeyboardButton(text="SUPPORT", url=SUPPORT_GROUP),
+                types.InlineKeyboardButton(text="SOURCE", url="https://github.com/"),
+            ],
+            [types.InlineKeyboardButton(text="DEVELOPER", url="https://t.me/Ironmanhindigaming")],
+        ]
+    )
+
     if chat_id < 0:
-        text = StartText.format(await message.mention(), bot_name, SUPPORT_GROUP)
+        # Group chat start message
+        text = (
+            f"🌟 <b>HEY {user_firstname}!</b>🎵\n"
+            f"🎶 <b>THIS IS {bot_name}!</b>\n"
+            f"🔊 A FAST AND POWERFUL MUSIC PLAYER BOT."
+        )
+        try:
+            reply = await c.sendPhoto(
+                chat_id=chat_id,
+                photo=START_IMG_URL,
+                caption=text,
+                parse_mode="HTML",
+                reply_to_message_id=message.id,
+                reply_markup=keyboard
+            )
+            if isinstance(reply, types.Error):
+                c.logger.warning(f"Error sending start photo: {reply.message}")
+                # Fallback to text message
+                reply = await message.reply_text(
+                    text=text,
+                    disable_web_page_preview=True,
+                    reply_markup=keyboard,
+                )
+                if isinstance(reply, types.Error):
+                    c.logger.warning(f"Error sending start message: {reply.message}")
+        except Exception as e:
+            c.logger.warning(f"Exception in start command: {str(e)}")
+            # Fallback to text message
+            reply = await message.reply_text(
+                text=text,
+                disable_web_page_preview=True,
+                reply_markup=keyboard,
+            )
+            if isinstance(reply, types.Error):
+                c.logger.warning(f"Error sending start message: {reply.message}")
+        return None
+
+    # Private chat start message (same style as group chat)
+    text = (
+        f"🌟 <b>HEY {user_firstname}!🎵\n"
+        f"🎶 <b>THIS IS {bot_name}!</b>\n"
+        f"🔊 A FAST AND POWERFUL MUSIC PLAYER BOT."
+    )
+    try:
+        reply = await c.sendPhoto(
+            chat_id=chat_id,
+            photo=START_IMG_URL,
+            caption=text,
+            parse_mode="HTML",
+            reply_to_message_id=message.id,
+            reply_markup=keyboard
+        )
+        if isinstance(reply, types.Error):
+            c.logger.warning(f"Error sending start photo: {reply.message}")
+            # Fallback to text message
+            reply = await message.reply_text(
+                text=text,
+                reply_markup=keyboard
+            )
+            if isinstance(reply, types.Error):
+                c.logger.warning(f"Error sending start message: {reply.message}")
+    except Exception as e:
+        c.logger.warning(f"Exception in start command: {str(e)}")
+        # Fallback to text message
         reply = await message.reply_text(
             text=text,
-            disable_web_page_preview=True,
-            reply_markup=SupportButton,
+            reply_markup=keyboard
         )
         if isinstance(reply, types.Error):
             c.logger.warning(f"Error sending start message: {reply.message}")
-        return None
-
-    text = PmStartText.format(await message.mention(), bot_name, __version__)
-    bot_username = c.me.usernames.editable_username
-    reply = await message.reply_text(text, reply_markup=add_me_markup(bot_username))
-    if isinstance(reply, types.Error):
-        c.logger.warning(f"Error sending start message: {reply.message}")
 
     return None
 
@@ -98,7 +173,7 @@ async def privacy_handler(c: Client, message: types.Message):
 - We may update this privacy policy from time to time. Any changes will be communicated through updates within the bot.
 
 <b>10. Contact Us:</b>
-If you have any questions or concerns about our privacy policy, feel free to contact us at <a href="https://t.me/ironmanhindigming1">Support Group</a>
+If you have any questions or concerns about our privacy policy, feel free to contact us at <a href="https://t.me/GuardxSupport">Support Group</a>
 
 ──────────────────
 <b>Note:</b> This privacy policy is in place to help you understand how your data is handled and to ensure that your experience with {bot_name} is safe and respectful.
@@ -176,7 +251,7 @@ async def reload_cmd(c: Client, message: types.Message) -> None:
 @Client.on_message(filters=Filter.command("ping"))
 async def ping_cmd(client: Client, message: types.Message) -> None:
     """
-    Handle the /ping command to check bot performance metrics.
+    Handle the /ping command to check bot performance metrics with an image.
     """
     start_time = time.monotonic()
     reply_msg = await message.reply_text("🏓 Pinging...")
@@ -193,16 +268,36 @@ async def ping_cmd(client: Client, message: types.Message) -> None:
     uptime = datetime.now() - StartTime
     uptime_str = str(uptime).split(".")[0]
 
-    response = (
+    caption = (
         "📊 <b>System Performance Metrics</b>\n\n"
         f"⏱️ <b>Bot Latency:</b> <code>{latency:.2f} ms</code>\n"
         f"🕒 <b>Uptime:</b> <code>{uptime_str}</code>\n"
         f"🧠 <b>CPU Usage:</b> <code>{cpu_info}</code>\n"
         f"📞 <b>NTgCalls Ping:</b> <code>{call_ping_info}</code>\n"
     )
-    done = await reply_msg.edit_text(response, disable_web_page_preview=True)
-    if isinstance(done, types.Error):
-        client.logger.warning(f"Error sending message: {done}")
+    try:
+        done = await client.sendPhoto(
+            chat_id=message.chat_id,
+            photo=PING_IMG_URL,
+            caption=caption,
+            parse_mode="HTML",
+            reply_to_message_id=message.id
+        )
+        if isinstance(done, types.Error):
+            client.logger.warning(f"Error sending ping photo: {done.message}")
+            # Fallback to text message
+            done = await reply_msg.edit_text(caption, disable_web_page_preview=True)
+            if isinstance(done, types.Error):
+                client.logger.warning(f"Error sending ping message: {done.message}")
+        else:
+            # Delete the "Pinging..." message if photo sent successfully
+            await reply_msg.delete()
+    except Exception as e:
+        client.logger.warning(f"Exception in ping command: {str(e)}")
+        # Fallback to text message
+        done = await reply_msg.edit_text(caption, disable_web_page_preview=True)
+        if isinstance(done, types.Error):
+            client.logger.warning(f"Error sending ping message: {done.message}")
     return None
 
 
