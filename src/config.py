@@ -1,3 +1,4 @@
+# config.py
 #  Copyright (c) 2025 AshokShau
 #  Licensed under the GNU AGPL v3.0: https://www.gnu.org/licenses/agpl-3.0.html
 #  Part of the TgMusicBot project. All rights reserved where applicable.
@@ -77,3 +78,7 @@ devs_env: Optional[str] = getenv("DEVS")
 DEVS: list[int] = list(map(int, devs_env.split())) if devs_env else []
 if OWNER_ID and OWNER_ID not in DEVS:
     DEVS.append(OWNER_ID)
+
+# Image URLs for start and ping commands
+PING_IMG_URL: Optional[str] = getenv("PING_IMG_URL", "https://example.com/ping_image.jpg")
+START_IMG_URL: Optional[str] = getenv("START_IMG_URL", "https://example.com/start_image.jpg")
