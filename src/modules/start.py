@@ -1,4 +1,3 @@
-# start.py
 #  Copyright (c) 2025 AshokShau
 #  Licensed under the GNU AGPL v3.0: https://www.gnu.org/licenses/agpl-3.0.html
 #  Part of the TgMusicBot project. All rights reserved where applicable.
@@ -10,12 +9,12 @@ from cachetools import TTLCache
 from pytdbot import Client, types
 
 from src import __version__, StartTime
-from src.config import SUPPORT_GROUP, SUPPORT_CHANNEL, PING_IMG_URL, START_IMG_URL
+from src.config import SUPPORT_GROUP, START_IMG_URL, PING_IMG_URL
 from src.helpers import call
 from src.helpers import chat_cache
-from src.modules.utils import Filter, sec_to_min, SupportButton, user_status_cache, check_user_status, chat_invite_cache
+from src.modules.utils import Filter, sec_to_min, user_status_cache, check_user_status, chat_invite_cache
 from src.modules.utils.admins import load_admin_cache
-from src.modules.utils.buttons import add_me_markup, HelpMenu, BackHelpMenu
+from src.modules.utils.buttons import add_me_markup, HelpMenu, BackHelpMenu, StartMenu, SourceMenu
 from src.modules.utils.play_helpers import (
     extract_argument,
 )
@@ -28,105 +27,36 @@ from src.modules.utils.strings import (
     AdminCommands,
 )
 
-
 @Client.on_message(filters=Filter.command(["start", "help"]))
 async def start_cmd(c: Client, message: types.Message):
     """
-    Handle the /start and /help command to welcome users with an image.
+    Handle the /start and /help command to welcome users.
     """
     chat_id = message.chat_id
     bot_name = c.me.first_name
-    bot_username = c.me.usernames.editable_username
-
-    # Fetch user's first name using sender_id
-    sender_id = message.sender_id
-    user_firstname = "Friend"  # Fallback in case user lookup fails
-    try:
-        user = await c.getUser(sender_id)
-        if isinstance(user, types.Error):
-            c.logger.warning(f"Error fetching user {sender_id}: {user.message}")
-        else:
-            user_firstname = user.first_name
-    except Exception as e:
-        c.logger.warning(f"Exception while fetching user {sender_id}: {str(e)}")
-
-    # Use add_me_markup for the keyboard
-    keyboard = add_me_markup(bot_username)
-
     if chat_id < 0:
-        # Group chat start message
-        text = (
-            f"🌟 <b>HEY {user_firstname}!</b> 🎵\n"
-            f"🎶 <b>THIS IS {bot_name}!</b>\n"
-            f"🔊 A FAST AND POWERFUL MUSIC PLAYER BOT."
-        )
-        try:
-            reply = await c.sendPhoto(
-                chat_id=chat_id,
-                photo=START_IMG_URL,
-                caption=text,
-                parse_mode="HTML",
-                reply_to_message_id=message.id,
-                reply_markup=keyboard
-            )
-            if isinstance(reply, types.Error):
-                c.logger.warning(f"Error sending start photo: {reply.message}")
-                # Fallback to text message
-                reply = await message.reply_text(
-                    text=text,
-                    disable_web_page_preview=True,
-                    reply_markup=keyboard,
-                )
-                if isinstance(reply, types.Error):
-                    c.logger.warning(f"Error sending start message: {reply.message}")
-        except Exception as e:
-            c.logger.warning(f"Exception in start command: {str(e)}")
-            # Fallback to text message
-            reply = await message.reply_text(
-                text=text,
-                disable_web_page_preview=True,
-                reply_markup=keyboard,
-            )
-            if isinstance(reply, types.Error):
-                c.logger.warning(f"Error sending start message: {reply.message}")
-        return None
-
-    # Private chat start message (same style as group chat)
-    text = (
-        f"🌟 <b>HEY {user_firstname}!</b> 🎵\n"
-        f"🎶 <b>THIS IS {bot_name}!</b>\n"
-        f"🔊 A FAST AND POWERFUL MUSIC PLAYER BOT."
-    )
-    try:
-        reply = await c.sendPhoto(
-            chat_id=chat_id,
+        text = StartText.format(await message.mention(), bot_name, SUPPORT_GROUP)
+        reply = await message.reply_photo(
             photo=START_IMG_URL,
             caption=text,
-            parse_mode="HTML",
-            reply_to_message_id=message.id,
-            reply_markup=keyboard
-        )
-        if isinstance(reply, types.Error):
-            c.logger.warning(f"Error sending start photo: {reply.message}")
-            # Fallback to text message
-            reply = await message.reply_text(
-                text=text,
-                reply_markup=keyboard
-            )
-            if isinstance(reply, types.Error):
-                c.logger.warning(f"Error sending start message: {reply.message}")
-    except Exception as e:
-        c.logger.warning(f"Exception in start command: {str(e)}")
-        # Fallback to text message
-        reply = await message.reply_text(
-            text=text,
-            reply_markup=keyboard
+            disable_web_page_preview=True,
+            reply_markup=StartMenu,
         )
         if isinstance(reply, types.Error):
             c.logger.warning(f"Error sending start message: {reply.message}")
+        return None
+
+    bot_username = c.me.usernames.editable_username
+    user_mention = await message.mention()
+    reply = await message.reply_photo(
+        photo=START_IMG_URL,
+        caption=f"HEY {user_mention} 🫶\n\n○ THIS IS IRO MUSIC !\n\n★ A FAST AND POWERFUL MUSIC PLAYER BOT.",
+        reply_markup=add_me_markup(bot_username)
+    )
+    if isinstance(reply, types.Error):
+        c.logger.warning(f"Error sending start message: {reply.message}")
 
     return None
-
 
 @Client.on_message(filters=Filter.command("privacy"))
 async def privacy_handler(c: Client, message: types.Message):
@@ -171,7 +101,7 @@ async def privacy_handler(c: Client, message: types.Message):
 - We may update this privacy policy from time to time. Any changes will be communicated through updates within the bot.
 
 <b>10. Contact Us:</b>
-If you have any questions or concerns about our privacy policy, feel free to contact us at <a href="https://t.me/GuardxSupport">Support Group</a>
+If you have any questions or concerns about our privacy policy, feel free to contact us at <a href="https://t.me/ironmanhindigming1">Support Group</a>
 
 ──────────────────
 <b>Note:</b> This privacy policy is in place to help you understand how your data is handled and to ensure that your experience with {bot_name} is safe and respectful.
@@ -182,9 +112,7 @@ If you have any questions or concerns about our privacy policy, feel free to con
         c.logger.warning(f"Error sending privacy policy message:{reply.message}")
     return
 
-
 rate_limit_cache = TTLCache(maxsize=100, ttl=180)
-
 
 @Client.on_message(filters=Filter.command("reload"))
 async def reload_cmd(c: Client, message: types.Message) -> None:
@@ -245,14 +173,16 @@ async def reload_cmd(c: Client, message: types.Message) -> None:
         c.logger.warning(f"Error sending message: {reply} for chat {chat_id}")
     return None
 
-
 @Client.on_message(filters=Filter.command("ping"))
 async def ping_cmd(client: Client, message: types.Message) -> None:
     """
-    Handle the /ping command to check bot performance metrics with an image.
+    Handle the /ping command to check bot performance metrics.
     """
     start_time = time.monotonic()
-    reply_msg = await message.reply_text("🏓 Pinging...")
+    reply_msg = await message.reply_photo(
+        photo=PING_IMG_URL,
+        caption="🏓 Pinging..."
+    )
     latency = (time.monotonic() - start_time) * 1000  # ms
 
     response = await call.stats_call(message.chat_id if message.chat_id < 0 else 1)
@@ -266,38 +196,17 @@ async def ping_cmd(client: Client, message: types.Message) -> None:
     uptime = datetime.now() - StartTime
     uptime_str = str(uptime).split(".")[0]
 
-    caption = (
+    response = (
         "📊 <b>System Performance Metrics</b>\n\n"
         f"⏱️ <b>Bot Latency:</b> <code>{latency:.2f} ms</code>\n"
         f"🕒 <b>Uptime:</b> <code>{uptime_str}</code>\n"
         f"🧠 <b>CPU Usage:</b> <code>{cpu_info}</code>\n"
         f"📞 <b>NTgCalls Ping:</b> <code>{call_ping_info}</code>\n"
     )
-    try:
-        done = await client.sendPhoto(
-            chat_id=message.chat_id,
-            photo=PING_IMG_URL,
-            caption=caption,
-            parse_mode="HTML",
-            reply_to_message_id=message.id
-        )
-        if isinstance(done, types.Error):
-            client.logger.warning(f"Error sending ping photo: {done.message}")
-            # Fallback to text message
-            done = await reply_msg.edit_text(caption, disable_web_page_preview=True)
-            if isinstance(done, types.Error):
-                client.logger.warning(f"Error sending ping message: {done.message}")
-        else:
-            # Delete the "Pinging..." message if photo sent successfully
-            await reply_msg.delete()
-    except Exception as e:
-        client.logger.warning(f"Exception in ping command: {str(e)}")
-        # Fallback to text message
-        done = await reply_msg.edit_text(caption, disable_web_page_preview=True)
-        if isinstance(done, types.Error):
-            client.logger.warning(f"Error sending ping message: {done.message}")
+    done = await reply_msg.edit_caption(caption=response, reply_markup=StartMenu)
+    if isinstance(done, types.Error):
+        client.logger.warning(f"Error sending message: {done}")
     return None
-
 
 @Client.on_message(filters=Filter.command("song"))
 async def song_cmd(c: Client, message: types.Message):
@@ -308,14 +217,42 @@ async def song_cmd(c: Client, message: types.Message):
     )
     if isinstance(reply, types.Error):
         c.logger.warning(f"Error sending message: {reply}")
-
     return
 
-
-@Client.on_updateNewCallbackQuery(filters=Filter.regex(r"help_\w+"))
+@Client.on_updateNewCallbackQuery(filters=Filter.regex(r"(help_\w+|source|back_to_start)"))
 async def callback_query_help(c: Client, message: types.UpdateNewCallbackQuery) -> None:
-    """Handle the help_* callback query."""
+    """Handle the help_*, source, and back_to_start callback queries."""
     data = message.payload.data.decode()
+    
+    if data == "source":
+        await message.answer(text="Source Information")
+        await message.edit_message_media(
+            media=types.InputMessagePhoto(
+                photo=START_IMG_URL,
+                caption="ABE SALE SOURCE CODE CHAHIYE TUJE PHELE IRONMAN KO PAPA BOL  FIR TUJE ZIP FILE DE SAKTA HU APNE BOT KA, YADI TUJE PAPA NHI BOLNA TO PESE DEDE 100 RUPEE DEDUGA"
+            ),
+            reply_markup=SourceMenu
+        )
+        return None
+        
+    if data == "back_to_start":
+        user = await c.getUser(message.sender_user_id)
+        if isinstance(user, types.Error):
+            c.logger.warning(f"Error getting user: {user.message}")
+            await message.answer(text="Something went wrong.", show_alert=True)
+            return None
+        user_mention = f'<a href="tg://user?id={message.sender_user_id}">{user.first_name}</a>'
+        await message.answer(text="Returning to Start Menu")
+        bot_username = c.me.usernames.editable_username
+        await message.edit_message_media(
+            media=types.InputMessagePhoto(
+                photo=START_IMG_URL,
+                caption=f"HEY {user_mention} 🫶\n\n○ THIS IS IRO MUSIC !\n\n★ A FAST AND POWERFUL MUSIC PLAYER BOT."
+            ),
+            reply_markup=add_me_markup(bot_username)
+        )
+        return None
+
     if data == "help_all":
         user = await c.getUser(message.sender_user_id)
         if isinstance(user, types.Error):
@@ -324,7 +261,7 @@ async def callback_query_help(c: Client, message: types.UpdateNewCallbackQuery) 
             return None
         await message.answer(text="Help Menu")
         text = PmStartText.format(user.first_name, c.me.first_name, __version__)
-        await message.edit_message_text(text=text, reply_markup=HelpMenu)
+        await message.edit_message_caption(caption=text, reply_markup=HelpMenu)
         return None
 
     actions = {
@@ -352,8 +289,8 @@ async def callback_query_help(c: Client, message: types.UpdateNewCallbackQuery) 
 
     if action := actions.get(data):
         await message.answer(text=action["answer"])
-        await message.edit_message_text(
-            text=action["text"], reply_markup=action["markup"]
+        await message.edit_message_caption(
+            caption=action["text"], reply_markup=action["markup"]
         )
         return None
 
