@@ -1,3 +1,4 @@
+# buttons.py
 #  Copyright (c) 2025 AshokShau
 #  Licensed under the GNU AGPL v3.0: https://www.gnu.org/licenses/agpl-3.0.html
 #  Part of the TgMusicBot project. All rights reserved where applicable.
@@ -31,15 +32,15 @@ CLOSE_BTN = types.InlineKeyboardButton(
 )
 
 CHANNEL_BTN = types.InlineKeyboardButton(
-    text="Channel 📢 ", type=types.InlineKeyboardButtonTypeUrl(config.SUPPORT_CHANNEL)
+    text="CHANNEL", type=types.InlineKeyboardButtonTypeUrl(config.SUPPORT_CHANNEL)
 )
 
 GROUP_BTN = types.InlineKeyboardButton(
-    text="Group 💬", type=types.InlineKeyboardButtonTypeUrl(config.SUPPORT_GROUP)
+    text="SUPPORT", type=types.InlineKeyboardButtonTypeUrl(config.SUPPORT_GROUP)
 )
 
 HELP_BTN = types.InlineKeyboardButton(
-    text="📖 Help", type=types.InlineKeyboardButtonTypeCallback(b"help_all")
+    text="HELP & COMMANDS", type=types.InlineKeyboardButtonTypeCallback(b"help_all")
 )
 
 USER_BTN = types.InlineKeyboardButton(
@@ -56,6 +57,14 @@ OWNER_BTN = types.InlineKeyboardButton(
 
 DEVS_BTN = types.InlineKeyboardButton(
     text="Devs Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_devs")
+)
+
+SOURCE_BTN = types.InlineKeyboardButton(
+    text="SOURCE", type=types.InlineKeyboardButtonTypeUrl("https://github.com/")
+)
+
+DEVELOPER_BTN = types.InlineKeyboardButton(
+    text="DEVELOPER", type=types.InlineKeyboardButtonTypeUrl("https://t.me/Ironmanhindigaming")
 )
 
 # ─────────────────────
@@ -89,20 +98,24 @@ BackHelpMenu = types.ReplyMarkupInlineKeyboard([[HELP_BTN, CLOSE_BTN]])
 
 def add_me_markup(username: str) -> types.ReplyMarkupInlineKeyboard:
     """
-    Returns an inline keyboard with a button to add the bot to a group
-    and support buttons.
+    Returns an inline keyboard with buttons matching the IRO MUSIC bot's layout:
+    - ADD ME TO YOUR GROUP
+    - HELP & COMMANDS | CHANNEL
+    - SUPPORT | SOURCE
+    - DEVELOPER
     """
     return types.ReplyMarkupInlineKeyboard(
         [
             [
                 types.InlineKeyboardButton(
-                    text="➕ Add me to your group",
+                    text="ADD ME TO YOUR GROUP",
                     type=types.InlineKeyboardButtonTypeUrl(
                         f"https://t.me/{username}?startgroup=true"
                     ),
                 ),
             ],
-            [HELP_BTN],
-            [CHANNEL_BTN, GROUP_BTN],
+            [HELP_BTN, CHANNEL_BTN],
+            [GROUP_BTN, SOURCE_BTN],
+            [DEVELOPER_BTN],
         ]
     )
