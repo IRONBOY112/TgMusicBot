@@ -31,11 +31,11 @@ CLOSE_BTN = types.InlineKeyboardButton(
 )
 
 CHANNEL_BTN = types.InlineKeyboardButton(
-    text="❄ CHANNEL ❄", type=types.InlineKeyboardButtonTypeUrl(config.SUPPORT_CHANNEL)
+    text="✿ ᴄʜᴀɴɴᴇʟ ✿", type=types.InlineKeyboardButtonTypeUrl(config.SUPPORT_CHANNEL)
 )
 
 GROUP_BTN = types.InlineKeyboardButton(
-    text="✨ SUPPORT ✨", type=types.InlineKeyboardButtonTypeUrl(config.SUPPORT_GROUP)
+    text="✇ sᴜᴘᴘᴏʀᴛ ✇", type=types.InlineKeyboardButtonTypeUrl(config.SUPPORT_GROUP)
 )
 
 SOURCE_BTN = types.InlineKeyboardButton(
@@ -43,31 +43,31 @@ SOURCE_BTN = types.InlineKeyboardButton(
 )
 
 DEVELOPER_BTN = types.InlineKeyboardButton(
-    text="🍒 DEVELOPER 🍒", type=types.InlineKeyboardButtonTypeUrl("https://t.me/Ironmanhindigaming")
+    text="✫ ᴅᴇᴠᴇʟᴏᴘᴇʀ ✫", type=types.InlineKeyboardButtonTypeUrl("https://t.me/Ironmanhindigaming")
 )
 
 HELP_BTN = types.InlineKeyboardButton(
-    text="HELP & COMMANDS", type=types.InlineKeyboardButtonTypeCallback(b"help_all")
+    text="♪ ᴄᴏᴍᴍᴀɴᴅs ♪", type=types.InlineKeyboardButtonTypeCallback(b"help_all")
 )
 
 BACK_BTN = types.InlineKeyboardButton(
-    text="⬅ BACK", type=types.InlineKeyboardButtonTypeCallback(b"back_to_start")
+    text="⬅ ʙᴀᴄᴋ", type=types.InlineKeyboardButtonTypeCallback(b"back_to_start")
 )
 
 USER_BTN = types.InlineKeyboardButton(
-    text="User Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_user")
+    text="♪ ᴜsᴇʀ ᴄᴏᴍᴍᴀɴᴅs ♪", type=types.InlineKeyboardButtonTypeCallback(b"help_user")
 )
 
 ADMIN_BTN = types.InlineKeyboardButton(
-    text="Admin Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_admin")
+    text="❖ ᴀᴅᴍɪɴ ᴄᴏᴍᴍᴀɴᴅs ❖", type=types.InlineKeyboardButtonTypeCallback(b"help_admin")
 )
 
 OWNER_BTN = types.InlineKeyboardButton(
-    text="Owner Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_owner")
+    text="✇ ᴏᴡɴᴇʀ ᴄᴏᴍᴍᴀɴᴅs ✇", type=types.InlineKeyboardButtonTypeCallback(b"help_owner")
 )
 
 DEVS_BTN = types.InlineKeyboardButton(
-    text="Devs Commands", type=types.InlineKeyboardButtonTypeCallback(b"help_devs")
+    text="✧ ᴅᴇᴠs ᴄᴏᴍᴍᴀɴᴅs ✧", type=types.InlineKeyboardButtonTypeCallback(b"help_devs")
 )
 
 # ─────────────────────
@@ -115,7 +115,7 @@ def add_me_markup(username: str) -> types.ReplyMarkupInlineKeyboard:
         [
             [
                 types.InlineKeyboardButton(
-                    text="➕ ADD ME TO YOUR GROUP",
+                    text="✦ ᴋɪᴅɴᴀᴘ ᴍᴇ ✦",
                     type=types.InlineKeyboardButtonTypeUrl(
                         f"https://t.me/{username}?startgroup=true"
                     ),
