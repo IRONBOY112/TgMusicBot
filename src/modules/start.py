@@ -226,11 +226,8 @@ async def callback_query_help(c: Client, message: types.UpdateNewCallbackQuery) 
     
     if data == "source":
         await message.answer(text="Source Information")
-        await message.edit_message_media(
-            media=types.InputMessagePhoto(
-                photo=START_IMG_URL,
-                caption="ABE SALE SOURCE CODE CHAHIYE TUJE PHELE IRONMAN KO PAPA BOL  FIR TUJE ZIP FILE DE SAKTA HU APNE BOT KA, YADI TUJE PAPA NHI BOLNA TO PESE DEDE 100 RUPEE DEDUGA"
-            ),
+        await message.edit_message_caption(
+            caption="AREY TUME SOURCE CODE CHAIYE PAR WO TOH MAI KHA GYA MAST TEL ME FRY KAR KE MAI KHA GYA",
             reply_markup=SourceMenu
         )
         return None
@@ -244,11 +241,8 @@ async def callback_query_help(c: Client, message: types.UpdateNewCallbackQuery) 
         user_mention = f'<a href="tg://user?id={message.sender_user_id}">{user.first_name}</a>'
         await message.answer(text="Returning to Start Menu")
         bot_username = c.me.usernames.editable_username
-        await message.edit_message_media(
-            media=types.InputMessagePhoto(
-                photo=START_IMG_URL,
-                caption=f"HEY {user_mention} 🫶\n\n○ THIS IS IRO MUSIC !\n\n★ A FAST AND POWERFUL MUSIC PLAYER BOT."
-            ),
+        await message.edit_message_caption(
+            caption=f"HEY {user_mention} 🫶\n\n○ THIS IS IRO MUSIC !\n\n★ A FAST AND POWERFUL MUSIC PLAYER BOT.",
             reply_markup=add_me_markup(bot_username)
         )
         return None
