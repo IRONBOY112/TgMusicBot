@@ -39,7 +39,7 @@ GROUP_BTN = types.InlineKeyboardButton(
 )
 
 SOURCE_BTN = types.InlineKeyboardButton(
-    text="☁ SOURCE ☁", type=types.InlineKeyboardButtonTypeCallback(b"source")
+    text="❖ sᴏᴜʀᴄᴇ ❖", type=types.InlineKeyboardButtonTypeCallback(b"source")
 )
 
 DEVELOPER_BTN = types.InlineKeyboardButton(
