@@ -1,4 +1,4 @@
-#  Copyright (c) 2025 AshokShau3
+#  Copyright (c) 2025 AshokShau
 #  Licensed under the GNU AGPL v3.0: https://www.gnu.org/licenses/agpl-3.0.html
 #  Part of the TgMusicBot project. All rights reserved where applicable.
 
@@ -47,7 +47,7 @@ DEVELOPER_BTN = types.InlineKeyboardButton(
 )
 
 HELP_BTN = types.InlineKeyboardButton(
-    text="📖 Help", type=types.InlineKeyboardButtonTypeCallback(b"help_all")
+    text="HELP & COMMANDS", type=types.InlineKeyboardButtonTypeCallback(b"help_all")
 )
 
 BACK_BTN = types.InlineKeyboardButton(
@@ -91,7 +91,7 @@ SupportButton = types.ReplyMarkupInlineKeyboard(
 )
 
 StartMenu = types.ReplyMarkupInlineKeyboard(
-    [[CHANNEL_BTN], [GROUP_BTN], [SOURCE_BTN], [DEVELOPER_BTN]]
+    [[CHANNEL_BTN], [GROUP_BTN], [SOURCE_BTN], [DEVELOPER_BTN], [HELP_BTN]]
 )
 
 SourceMenu = types.ReplyMarkupInlineKeyboard([[BACK_BTN]])
@@ -125,5 +125,6 @@ def add_me_markup(username: str) -> types.ReplyMarkupInlineKeyboard:
             [GROUP_BTN],
             [SOURCE_BTN],
             [DEVELOPER_BTN],
+            [HELP_BTN],
         ]
     )
