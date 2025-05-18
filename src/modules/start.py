@@ -51,7 +51,7 @@ async def start_cmd(c: Client, message: types.Message):
     reply = await message.reply_photo(
         photo=START_IMG_URL,
         caption=f"👋 нєу {user_mention}💠, 🥀\n\n🎶 Wᴇʟᴄᴏᴍᴇ ᴛᴏ IROMUSIC 🎵\n\n➻ 🚀 ᴀ sᴜᴘᴇʀғᴀsᴛ ᴀɴᴅ ᴘᴏᴡᴇʀғᴜʟ Tᴇʟᴇɢʀᴀᴍ Mᴜsɪᴄ Bᴏᴛ ᴡɪᴛʜ ᴀᴍᴀᴢɪɴɢ ғᴇᴀᴛᴜʀᴇs. ✨\n🎧 Sᴜᴘᴘᴏʀᴛᴇᴅ ᴘʟᴀᴛғᴏʀᴍ: ʏᴏᴜᴛᴜʙᴇ.\n
-──────────────────\n๏ ᴄʟɪᴄᴋ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ᴍᴏᴅᴜʟᴇ ᴀɴᴅ ᴄᴏᴍᴍᴀɴᴅ ɪɴғᴏ..",
+──────────────────\n ๏ ᴄʟɪᴄᴋ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ᴍᴏᴅᴜʟᴇ ᴀɴᴅ ᴄᴏᴍᴍᴀɴᴅ ɪɴғᴏ..",
         reply_markup=add_me_markup(bot_username)
     )
     if isinstance(reply, types.Error):
@@ -243,7 +243,8 @@ async def callback_query_help(c: Client, message: types.UpdateNewCallbackQuery) 
         await message.answer(text="Returning to Start Menu")
         bot_username = c.me.usernames.editable_username
         await message.edit_message_caption(
-            caption=f"HEY {user_mention} 🫶\n\n○ THIS IS IRO MUSIC !\n\n★ A FAST AND POWERFUL MUSIC PLAYER BOT.",
+            caption=f"👋 нєу {user_mention}💠, 🥀\n\n🎶 Wᴇʟᴄᴏᴍᴇ ᴛᴏ IROMUSIC 🎵\n\n➻ 🚀 ᴀ sᴜᴘᴇʀғᴀsᴛ ᴀɴᴅ ᴘᴏᴡᴇʀғᴜʟ Tᴇʟᴇɢʀᴀᴍ Mᴜsɪᴄ Bᴏᴛ ᴡɪᴛʜ ᴀᴍᴀᴢɪɴɢ ғᴇᴀᴛᴜʀᴇs. ✨\n🎧 Sᴜᴘᴘᴏʀᴛᴇᴅ ᴘʟᴀᴛғᴏʀᴍ: ʏᴏᴜᴛᴜʙᴇ.\n
+──────────────────\n ๏ ᴄʟɪᴄᴋ ᴛʜᴇ ʜᴇʟᴘ ʙᴜᴛᴛᴏɴ ғᴏʀ ᴍᴏᴅᴜʟᴇ ᴀɴᴅ ᴄᴏᴍᴍᴀɴᴅ ɪɴғᴏ...",
             reply_markup=add_me_markup(bot_username)
         )
         return None
